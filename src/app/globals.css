@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  --font-poppins: var(--font-poppins);
+
+  --color-black: #000000;
+  --color-dark-gray: #1a1a1a;
+  --color-accent-gray: #2d2d2d;
+  --color-light-gray: #b5b5b5;
+  --color-muted-gray: #b4b4b4;
+  --color-faq-bg: #0a0a0a;
+}
+
+:root {
+  --background: #000000;
+  --foreground: #ffffff;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-poppins), sans-serif;
+}
+
+/* Custom patterns or utilities if needed */
+.pattern-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(106px, 1fr));
+  gap: 0;
+}
