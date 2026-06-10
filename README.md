@@ -1,83 +1,36 @@
-# Gésio de Moura — Dev & Designer 🚀
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Bem-vindo ao repositório do projeto **Gésio.dev**. Este é um site de portfólio de alta fidelidade visual, construído com as tecnologias mais modernas do ecossistema web para refletir a intersecção entre o design refinado e o desenvolvimento robusto.
+## Getting Started
 
-> "Uma mistura inteligente de dev com designer."
+First, run the development server:
 
----
-
-## ✨ O Projeto
-
-Este projeto é uma landing page performática que utiliza padrões visuais geométricos e uma estética *dark mode* para apresentar as habilidades e experiências de Gésio de Moura. O foco principal é a **experiência do usuário (UX)** e a **fidelidade visual**, garantindo que o design concebido no Figma seja traduzido perfeitamente para o código.
-
-### 🛠️ Tech Stack
-
-O projeto utiliza o que há de mais recente no mercado:
-
-- **Framework:** [Next.js 16 (App Router)](https://nextjs.org/)
-- **Linguagem:** [TypeScript](https://www.typescriptlang.org/)
-- **Estilização:** [Tailwind CSS v4](https://tailwindcss.com/)
-- **Ícones:** [Lucide React](https://lucide.dev/)
-- **Runtime:** [React 19](https://react.dev/)
-
----
-
-## 🏗️ Estrutura de Componentes
-
-O projeto é organizado de forma modular para facilitar a manutenção e escalabilidade:
-
-```text
-src/components/
-├── About.tsx             # Seção institucional e FAQ
-├── Accordion.tsx         # Componente de acordeão interativo para o FAQ
-├── Button.tsx            # Sistema de botões (Primary/Secondary)
-├── DecorativePattern.tsx # O motor visual do site (Padrões geométricos)
-├── Footer.tsx            # Rodapé com navegação rápida
-├── Header.tsx            # Cabeçalho fixo com branding
-└── Hero.tsx              # Seção principal de impacto
-```
-
----
-
-## 📊 Insights de Arquitetura
-
-Após uma análise profunda do código, identificamos os seguintes dados interessantes:
-
-- **Componente Ubíquo:** O `DecorativePattern` é o componente mais instanciado (14x), sendo responsável pela identidade visual única do site.
-- **Interatividade:** O elemento de ação predominante é o `<button>`, encapsulado tanto no componente `Button` quanto no `Accordion`, garantindo uma base sólida para acessibilidade e feedback tátil.
-- **Foco em Conversão:** Os botões são estrategicamente posicionados no `Header` e `Hero` para guiar o usuário pelas experiências e projetos.
-
----
-
-## 🚀 Como Executar
-
-### Pré-requisitos
-- Node.js (versão recomendada v20 ou superior)
-- npm, yarn ou pnpm
-
-### Instalação
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/seu-usuario/gesio-dev.git
-   ```
-2. Instale as dependências:
-   ```bash
-   npm install
-   ```
-
-### Desenvolvimento
-Inicie o servidor local:
 ```bash
 npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
-Acesse [http://localhost:3000](http://localhost:3000) no seu navegador.
 
----
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## 📝 Licença
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
----
+## Learn More
 
-Feito com ☕ e código por [Gésio de Moura](https://github.com/gesiodemoura).
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
