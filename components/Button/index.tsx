@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { AnchorHTMLAttributes, ButtonHTMLAttributes } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
     "inline-flex flex-row items-center justify-center gap-4 rounded-lg font-sans font-semibold text-base leading-6 text-center transition-all duration-200 select-none px-4 py-2",
@@ -33,7 +34,7 @@ export default function Button({
     children,
     ...props
 }: ButtonTypeProps | AnchorTypeProps) {
-    const combinedClasses = buttonVariants({ variant, className });
+    const combinedClasses = cn(buttonVariants({ variant }), className);
 
     if (as === "link") {
         const { href, ...linkProps } = props as AnchorTypeProps;
