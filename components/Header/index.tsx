@@ -12,8 +12,8 @@ export default function Header() {
                 <Logo />
             </div>
             <nav className="flex items-center gap-4">
-                <Button as="link" href="#">Experiências</Button>
-                <Button as="link" href="#" className="hidden md:flex">Projetos</Button>
+                <Button as="link" href="#experiencias">Experiências</Button>
+                <Button as="link" href="#depoimentos" className="hidden md:flex">Depoimentos</Button>
             </nav>
         </ScrollVisibilityWrapper>
     );
