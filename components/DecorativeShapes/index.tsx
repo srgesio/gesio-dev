@@ -6,12 +6,8 @@ export default function DecorativeShapes(props: React.HTMLAttributes<HTMLDivElem
             <div className="flex flex-col gap-4">
                 <IndividualShapeGroup />
                 <IndividualShapeGroup />
-                <IndividualShapeGroup />
-                <IndividualShapeGroup />
             </div>
             <div className="flex flex-col gap-4">
-                <IndividualShapeGroup />
-                <IndividualShapeGroup />
                 <IndividualShapeGroup />
                 <IndividualShapeGroup />
             </div>
