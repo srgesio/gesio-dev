@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback, TouchEvent, MouseEvent } from "react";
-import IndividualShapeGroup from "@/components/DecorativeShapes/IndividualShapeGroup";
+import { useRef } from "react";
 import { cn } from "@/lib/utils";
+import { useMessageSlider } from "./useMessageSlider";
 
 export interface Message {
   id: string | number;
@@ -45,115 +45,28 @@ export default function MessageSlider({
   autoPlay = true,
   autoPlayInterval = 6000,
 }: MessageSliderProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [dragOffset, setDragOffset] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const startX = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
-  const autoPlayTimer = useRef<NodeJS.Timeout | null>(null);
-
   const totalSlides = messages.length;
 
-  const nextSlide = useCallback(() => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % totalSlides);
-  }, [totalSlides]);
-
-  const prevSlide = useCallback(() => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + totalSlides) % totalSlides);
-  }, [totalSlides]);
-
-  const goToSlide = (index: number) => {
-    setCurrentIndex(index);
-  };
-
-  // Reset autoplay timer whenever current index changes or dragging changes
-  useEffect(() => {
-    if (autoPlay && !isDragging && totalSlides > 1) {
-      autoPlayTimer.current = setInterval(nextSlide, autoPlayInterval);
-    }
-    return () => {
-      if (autoPlayTimer.current) {
-        clearInterval(autoPlayTimer.current);
-      }
-    };
-  }, [currentIndex, isDragging, autoPlay, autoPlayInterval, totalSlides, nextSlide]);
-
-  // Touch Events
-  const handleTouchStart = (e: TouchEvent) => {
-    setIsDragging(true);
-    startX.current = e.touches[0].clientX;
-    setDragOffset(0);
-  };
-
-  const handleTouchMove = (e: TouchEvent) => {
-    if (!isDragging) return;
-    const currentX = e.touches[0].clientX;
-    const diff = currentX - startX.current;
-
-    // Dampen drag at boundary edges
-    if ((currentIndex === 0 && diff > 0) || (currentIndex === totalSlides - 1 && diff < 0)) {
-      setDragOffset(diff * 0.4);
-    } else {
-      setDragOffset(diff);
-    }
-  };
-
-  const handleTouchEnd = () => {
-    if (!isDragging) return;
-    setIsDragging(false);
-
-    const threshold = 60;
-    if (dragOffset > threshold) {
-      prevSlide();
-    } else if (dragOffset < -threshold) {
-      nextSlide();
-    }
-    setDragOffset(0);
-  };
-
-  // Mouse Events
-  const handleMouseDown = (e: MouseEvent) => {
-    // Avoid dragging on button click or dot click
-    if ((e.target as HTMLElement).closest("button") || (e.target as HTMLElement).closest(".dot-indicator")) {
-      return;
-    }
-    setIsDragging(true);
-    startX.current = e.clientX;
-    setDragOffset(0);
-  };
-
-  const handleMouseMove = (e: MouseEvent) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const currentX = e.clientX;
-    const diff = currentX - startX.current;
-
-    // Dampen drag at boundary edges
-    if ((currentIndex === 0 && diff > 0) || (currentIndex === totalSlides - 1 && diff < 0)) {
-      setDragOffset(diff * 0.4);
-    } else {
-      setDragOffset(diff);
-    }
-  };
-
-  const handleMouseUp = () => {
-    if (!isDragging) return;
-    setIsDragging(false);
-
-    const threshold = 60;
-    if (dragOffset > threshold) {
-      prevSlide();
-    } else if (dragOffset < -threshold) {
-      nextSlide();
-    }
-    setDragOffset(0);
-  };
-
-  const handleMouseLeave = () => {
-    if (isDragging) {
-      handleMouseUp();
-    }
-  };
+  const {
+    currentIndex,
+    dragOffset,
+    isDragging,
+    nextSlide,
+    prevSlide,
+    goToSlide,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
+    handleMouseDown,
+    handleMouseMove,
+    handleMouseUp,
+    handleMouseLeave,
+  } = useMessageSlider({
+    totalSlides,
+    autoPlay,
+    autoPlayInterval,
+  });
 
   return (
     <div
@@ -170,7 +83,6 @@ export default function MessageSlider({
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Slider Viewport */}
       <div className="relative overflow-hidden z-10 w-full">
         <div
           className={cn(
@@ -183,7 +95,6 @@ export default function MessageSlider({
         >
           {messages.map((msg) => (
             <div key={msg.id} className="w-full shrink-0 flex flex-col gap-6 text-left">
-              {/* Author & Role */}
               <div className="flex items-center text-sm sm:text-base font-sans tracking-wide">
                 <span className="font-semibold text-zinc-200">{msg.author}</span>
                 {msg.role && (
@@ -191,7 +102,6 @@ export default function MessageSlider({
                 )}
               </div>
 
-              {/* Message text */}
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-light text-zinc-100 leading-snug md:leading-normal min-h-[140px] flex items-center">
                 {msg.text}
               </h2>
@@ -200,9 +110,7 @@ export default function MessageSlider({
         </div>
       </div>
 
-      {/* Bottom Controls */}
       <div className="relative z-10 flex items-center justify-between mt-10 md:mt-14 w-full">
-        {/* Pagination Dots (Square/rounded-sm indicators) */}
         <div className="flex gap-2">
           {messages.map((_, index) => (
             <button
@@ -219,7 +127,6 @@ export default function MessageSlider({
           ))}
         </div>
 
-        {/* Action Buttons */}
         <div className="flex gap-3">
           <button
             onClick={prevSlide}
