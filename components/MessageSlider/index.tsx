@@ -110,8 +110,8 @@ export default function MessageSlider({
         </div>
       </div>
 
-      <div className="relative z-10 flex items-center justify-between mt-10 md:mt-14 w-full">
-        <div className="flex gap-2">
+      <div className="relative z-10 flex items-center gap-4 justify-between mt-10 md:mt-14 w-full">
+        <div className="flex gap-2 w-full order-1 md:order-0 justify-center md:justify-start">
           {messages.map((_, index) => (
             <button
               key={index}
@@ -126,41 +126,38 @@ export default function MessageSlider({
             />
           ))}
         </div>
-
-        <div className="flex gap-3">
-          <button
-            onClick={prevSlide}
-            className="w-10 h-10 flex items-center justify-center rounded-lg bg-zinc-950/80 border border-zinc-800 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900 active:scale-95 transition-all duration-200 cursor-pointer"
-            aria-label="Previous message"
+        <button
+          onClick={prevSlide}
+          className="w-10 h-10 flex items-center order-0 md:order-1 justify-center rounded-lg bg-zinc-950/80 border border-zinc-800 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900 active:scale-95 transition-all duration-200 cursor-pointer"
+          aria-label="Previous message"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="w-4 h-4"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="w-4 h-4"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-            </svg>
-          </button>
-          <button
-            onClick={nextSlide}
-            className="w-10 h-10 flex items-center justify-center rounded-lg bg-zinc-100 text-zinc-950 hover:bg-zinc-200 active:scale-95 transition-all duration-200 cursor-pointer shadow-lg shadow-white/5"
-            aria-label="Next message"
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+        </button>
+        <button
+          onClick={nextSlide}
+          className="w-10 h-10 flex items-center order-2 justify-center rounded-lg bg-zinc-100 text-zinc-950 hover:bg-zinc-200 active:scale-95 transition-all duration-200 cursor-pointer shadow-lg shadow-white/5"
+          aria-label="Next message"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="w-4 h-4"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="w-4 h-4"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-            </svg>
-          </button>
-        </div>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </button>
       </div>
     </div>
   );
