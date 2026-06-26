@@ -4,16 +4,23 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-    "inline-flex flex-row items-center justify-center gap-4 rounded-lg font-sans font-semibold text-base leading-6 text-center transition-all duration-200 select-none px-4 py-2",
+    "inline-flex flex-row items-center justify-center rounded-lg font-sans text-base leading-6 text-center transition-all duration-200 select-none active:scale-95 cursor-pointer",
     {
         variants: {
             variant: {
                 primary: "bg-zinc-900 border border-zinc-800 text-white hover:bg-zinc-800 hover:border-zinc-700 dark:bg-zinc-950 dark:hover:bg-zinc-900",
                 secondary: "bg-transparent border border-zinc-200 text-zinc-900 hover:bg-zinc-50 dark:border-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-950",
+                ghost: "bg-zinc-950/80 border border-zinc-800 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900",
+                inverse: "bg-zinc-100 text-zinc-950 hover:bg-zinc-200 shadow-lg shadow-white/5",
+            },
+            size: {
+                default: "gap-4 font-semibold px-4 py-2",
+                icon: "p-2",
             },
         },
         defaultVariants: {
             variant: "primary",
+            size: "default",
         },
     }
 );
@@ -30,11 +37,12 @@ type AnchorTypeProps = BaseProps & AnchorHTMLAttributes<HTMLAnchorElement> & { h
 export default function Button({
     as = "button",
     variant,
+    size,
     className = "",
     children,
     ...props
 }: ButtonTypeProps | AnchorTypeProps) {
-    const combinedClasses = cn(buttonVariants({ variant }), className);
+    const combinedClasses = cn(buttonVariants({ variant, size }), className);
 
     if (as === "link") {
         const { href, ...linkProps } = props as AnchorTypeProps;

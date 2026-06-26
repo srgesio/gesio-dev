@@ -1,6 +1,8 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import Button from "@/components/Button";
 import { cn } from "@/lib/utils";
 import { useMessageSlider } from "./useMessageSlider";
 
@@ -37,15 +39,22 @@ const DEFAULT_MESSAGES: Message[] = [
     author: "Beltrano de Oliveira",
     role: "Product Manager",
   },
+  {
+    id: 4,
+    text: "O Gésio é um profissional que se destaca pela sua dedicação e comprometimento. Ele é um excelente profissional e um grande amigo.",
+    author: "Fulano de Tal",
+    role: "Colega de trabalho",
+  },
 ];
 
 export default function MessageSlider({
   messages = DEFAULT_MESSAGES,
   className,
-  autoPlay = true,
+  autoPlay = false,
   autoPlayInterval = 6000,
 }: MessageSliderProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const [slideWidth, setSlideWidth] = useState(0);
   const totalSlides = messages.length;
 
   const {
@@ -68,11 +77,24 @@ export default function MessageSlider({
     autoPlayInterval,
   });
 
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+
+    const updateWidth = () => setSlideWidth(viewport.clientWidth);
+
+    updateWidth();
+    const observer = new ResizeObserver(updateWidth);
+    observer.observe(viewport);
+    return () => observer.disconnect();
+  }, []);
+
+  const slideOffset = slideWidth > 0 ? -currentIndex * slideWidth + dragOffset : dragOffset;
+
   return (
     <div
-      ref={containerRef}
       className={cn(
-        "relative w-full max-w-2xl mx-auto overflow-hidden px-6 py-10 sm:px-12 sm:py-16 md:px-20 md:py-24 select-none cursor-grab active:cursor-grabbing",
+        "relative w-full max-w-2xl mx-auto z-10 py-4 md:p-6 select-none cursor-grab active:cursor-grabbing",
         className
       )}
       onTouchStart={handleTouchStart}
@@ -83,81 +105,71 @@ export default function MessageSlider({
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="relative overflow-hidden z-10 w-full">
-        <div
-          className={cn(
-            "flex w-full",
-            isDragging ? "transition-none" : "transition-transform duration-500 ease-out"
-          )}
-          style={{
-            transform: `translateX(calc(-${currentIndex * 100}% + ${dragOffset}px))`,
-          }}
-        >
-          {messages.map((msg) => (
-            <div key={msg.id} className="w-full shrink-0 flex flex-col gap-6 text-left">
-              <div className="flex items-center text-sm sm:text-base font-sans tracking-wide">
-                <span className="font-semibold text-zinc-200">{msg.author}</span>
-                {msg.role && (
-                  <span className="text-zinc-500 font-light">, {msg.role}</span>
-                )}
-              </div>
+      <div className="relative w-full bg-zinc-950 md:bg-transparent rounded-lg p-6">
+        <div ref={viewportRef} className="overflow-hidden w-full">
+          <div
+            className={cn(
+              "flex",
+              isDragging ? "transition-none" : "transition-transform duration-500 ease-out"
+            )}
+            style={{ transform: `translateX(${slideOffset}px)` }}
+          >
+            {messages.map((msg) => (
+              <div
+                key={msg.id}
+                className="shrink-0 flex flex-col-reverse md:flex-col gap-6 text-left overflow-hidden"
+                style={{ width: slideWidth > 0 ? slideWidth : "100%" }}
+              >
+                <div className="flex flex-col gap-2 md:flex-row md:items-center text-2xl font-sans tracking-wide min-w-0">
+                  <span className="font-light text-zinc-200">{msg.author},</span>
+                  {msg.role && (
+                    <span className="text-zinc-500 font-light text-base">{msg.role}</span>
+                  )}
+                </div>
 
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-light text-zinc-100 leading-snug md:leading-normal min-h-[140px] flex items-center">
-                {msg.text}
-              </h2>
-            </div>
-          ))}
+                <h2 className="text-3xl md:text-5xl font-light text-zinc-100 leading-snug md:leading-normal min-w-0">
+                  {msg.text}
+                </h2>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
       <div className="relative z-10 flex items-center gap-4 justify-between mt-10 md:mt-14 w-full">
-        <div className="flex gap-2 w-full order-1 md:order-0 justify-center md:justify-start">
+        <div className="flex gap-4 w-full order-1 md:order-0 justify-center md:justify-start">
           {messages.map((_, index) => (
             <button
               key={index}
               onClick={() => goToSlide(index)}
               className={cn(
-                "dot-indicator w-3 h-3 rounded-xs transition-colors duration-300 focus:outline-hidden",
+                "dot-indicator w-6 h-6 rounded-sm transition-colors duration-300 focus:outline-hidden",
                 index === currentIndex
-                  ? "bg-zinc-100 scale-105"
+                  ? "bg-zinc-100"
                   : "bg-zinc-800 hover:bg-zinc-700"
               )}
-              aria-label={`Go to slide ${index + 1}`}
+              aria-label={`Ir para mensagem ${index + 1}`}
             />
           ))}
         </div>
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={prevSlide}
-          className="w-10 h-10 flex items-center order-0 md:order-1 justify-center rounded-lg bg-zinc-950/80 border border-zinc-800 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900 active:scale-95 transition-all duration-200 cursor-pointer"
-          aria-label="Previous message"
+          className="order-0 md:order-1"
+          aria-label="Mensagem anterior"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-            className="w-4 h-4"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-          </svg>
-        </button>
-        <button
+          <ChevronLeft className="w-8 h-8" strokeWidth={1} />
+        </Button>
+        <Button
+          variant="inverse"
+          size="icon"
           onClick={nextSlide}
-          className="w-10 h-10 flex items-center order-2 justify-center rounded-lg bg-zinc-100 text-zinc-950 hover:bg-zinc-200 active:scale-95 transition-all duration-200 cursor-pointer shadow-lg shadow-white/5"
-          aria-label="Next message"
+          className="order-2"
+          aria-label="Próxima mensagem"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-            className="w-4 h-4"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-          </svg>
-        </button>
+          <ChevronRight className="w-8 h-8" strokeWidth={1} />
+        </Button>
       </div>
     </div>
   );

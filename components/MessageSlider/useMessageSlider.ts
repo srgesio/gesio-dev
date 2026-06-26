@@ -8,7 +8,7 @@ interface UseMessageSliderProps {
 
 export function useMessageSlider({
   totalSlides,
-  autoPlay = true,
+  autoPlay = false,
   autoPlayInterval = 6000,
 }: UseMessageSliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
