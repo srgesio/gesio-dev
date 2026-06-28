@@ -1,10 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import Autoplay from "embla-carousel-autoplay";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Button from "@/components/Button";
+import {
+  Carousel,
+  type CarouselApi,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
-import { useMessageSlider } from "./useMessageSlider";
 
 export interface Message {
   id: string | number;
@@ -53,73 +59,53 @@ export default function MessageSlider({
   autoPlay = false,
   autoPlayInterval = 6000,
 }: MessageSliderProps) {
-  const viewportRef = useRef<HTMLDivElement>(null);
-  const [slideWidth, setSlideWidth] = useState(0);
-  const totalSlides = messages.length;
+  const [api, setApi] = useState<CarouselApi>();
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const {
-    currentIndex,
-    dragOffset,
-    isDragging,
-    nextSlide,
-    prevSlide,
-    goToSlide,
-    handleTouchStart,
-    handleTouchMove,
-    handleTouchEnd,
-    handleMouseDown,
-    handleMouseMove,
-    handleMouseUp,
-    handleMouseLeave,
-  } = useMessageSlider({
-    totalSlides,
-    autoPlay,
-    autoPlayInterval,
-  });
+  const plugins = useMemo(
+    () =>
+      autoPlay
+        ? [
+            Autoplay({
+              delay: autoPlayInterval,
+              stopOnInteraction: true,
+            }),
+          ]
+        : [],
+    [autoPlay, autoPlayInterval]
+  );
 
   useEffect(() => {
-    const viewport = viewportRef.current;
-    if (!viewport) return;
+    if (!api) return;
 
-    const updateWidth = () => setSlideWidth(viewport.clientWidth);
+    const handleSelect = () => {
+      setCurrentIndex(api.selectedScrollSnap());
+    };
 
-    updateWidth();
-    const observer = new ResizeObserver(updateWidth);
-    observer.observe(viewport);
-    return () => observer.disconnect();
-  }, []);
+    api.on("select", handleSelect);
+    api.on("reInit", handleSelect);
 
-  const slideOffset = slideWidth > 0 ? -currentIndex * slideWidth + dragOffset : dragOffset;
+    return () => {
+      api.off("select", handleSelect);
+      api.off("reInit", handleSelect);
+    };
+  }, [api]);
 
   return (
-    <div
+    <Carousel
+      setApi={setApi}
+      plugins={plugins}
+      opts={{ loop: true, align: "start" }}
       className={cn(
-        "relative w-full max-w-2xl mx-auto z-10 py-4 md:p-6 select-none cursor-grab active:cursor-grabbing",
+        "relative w-full max-w-2xl mx-auto z-10 py-4 md:p-6",
         className
       )}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseLeave}
     >
-      <div className="relative w-full bg-zinc-950 md:bg-transparent rounded-lg p-6">
-        <div ref={viewportRef} className="overflow-hidden w-full">
-          <div
-            className={cn(
-              "flex",
-              isDragging ? "transition-none" : "transition-transform duration-500 ease-out"
-            )}
-            style={{ transform: `translateX(${slideOffset}px)` }}
-          >
-            {messages.map((msg) => (
-              <div
-                key={msg.id}
-                className="shrink-0 flex flex-col-reverse md:flex-col gap-6 text-left overflow-hidden"
-                style={{ width: slideWidth > 0 ? slideWidth : "100%" }}
-              >
+      <div className="relative w-full bg-zinc-950 md:bg-transparent rounded-lg">
+        <CarouselContent className="ml-0">
+          {messages.map((msg) => (
+            <CarouselItem key={msg.id} className="pl-0 basis-full">
+              <div className="flex flex-col-reverse md:flex-col gap-6 text-left overflow-hidden p-6 md:p-0">
                 <div className="flex flex-col gap-2 md:flex-row md:items-center text-2xl font-sans tracking-wide min-w-0">
                   <span className="font-light text-zinc-200">{msg.author},</span>
                   {msg.role && (
@@ -131,9 +117,9 @@ export default function MessageSlider({
                   {msg.text}
                 </h2>
               </div>
-            ))}
-          </div>
-        </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
       </div>
 
       <div className="relative z-10 flex items-center gap-4 justify-between mt-10 md:mt-14 w-full">
@@ -141,21 +127,23 @@ export default function MessageSlider({
           {messages.map((_, index) => (
             <button
               key={index}
-              onClick={() => goToSlide(index)}
+              type="button"
+              onClick={() => api?.scrollTo(index)}
               className={cn(
-                "dot-indicator w-6 h-6 rounded-sm transition-colors duration-300 focus:outline-hidden",
+                "w-6 h-6 rounded-sm transition-colors duration-300 focus:outline-hidden",
                 index === currentIndex
                   ? "bg-zinc-100"
                   : "bg-zinc-800 hover:bg-zinc-700"
               )}
               aria-label={`Ir para mensagem ${index + 1}`}
+              aria-current={index === currentIndex ? "true" : undefined}
             />
           ))}
         </div>
         <Button
           variant="ghost"
           size="icon"
-          onClick={prevSlide}
+          onClick={() => api?.scrollPrev()}
           className="order-0 md:order-1"
           aria-label="Mensagem anterior"
         >
@@ -164,13 +152,13 @@ export default function MessageSlider({
         <Button
           variant="inverse"
           size="icon"
-          onClick={nextSlide}
+          onClick={() => api?.scrollNext()}
           className="order-2"
           aria-label="Próxima mensagem"
         >
           <ChevronRight className="w-8 h-8" strokeWidth={1} />
         </Button>
       </div>
-    </div>
+    </Carousel>
   );
 }
