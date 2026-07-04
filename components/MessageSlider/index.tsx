@@ -66,11 +66,11 @@ export default function MessageSlider({
     () =>
       autoPlay
         ? [
-            Autoplay({
-              delay: autoPlayInterval,
-              stopOnInteraction: true,
-            }),
-          ]
+          Autoplay({
+            delay: autoPlayInterval,
+            stopOnInteraction: true,
+          }),
+        ]
         : [],
     [autoPlay, autoPlayInterval]
   );
@@ -113,7 +113,7 @@ export default function MessageSlider({
                   )}
                 </div>
 
-                <h2 className="text-3xl md:text-5xl font-light text-zinc-100 leading-snug md:leading-normal min-w-0">
+                <h2 className="text-3xl md:text-5xl font-extralight text-zinc-100 leading-snug md:leading-normal min-w-0">
                   {msg.text}
                 </h2>
               </div>

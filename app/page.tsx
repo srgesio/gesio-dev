@@ -1,4 +1,5 @@
 import Hero from "@/components/Hero";
+import FAQ from "@/components/FAQ";
 import Experience from "@/components/Experience";
 import Testimonials from "@/components/Testimonials";
 import DecorativeShapes from "@/components/DecorativeShapes";
@@ -8,6 +9,7 @@ export default function Home() {
     <div className="flex flex-col w-full items-center justify-center">
       <div className="flex flex-1 z-1 w-full flex-col items-center justify-center">
         <Hero />
+        <FAQ />
         <Experience />
         <Testimonials />
       </div>
