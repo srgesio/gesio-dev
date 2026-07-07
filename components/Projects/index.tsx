@@ -1,6 +1,6 @@
 import React from "react";
 import { projects } from "@/lib/projects";
-import ProjectCard from "@/components/ProjectCard";
+import Card from "@/components/Card";
 import Button from "@/components/Button";
 import { ChevronRight } from "lucide-react";
 
@@ -17,21 +17,17 @@ export default function Projects() {
   return (
     <section
       id="projetos"
-      className="flex relative min-h-screen w-full items-center justify-center px-4 md:px-6"
+      className="flex relative min-h-screen w-full bg-zinc-950 items-center justify-center px-4 py-8 md:px-6"
     >
       <div className="flex w-full flex-col gap-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-4xl font-black text-white">Projetos</h2>
-          <Button as="a" href="#experiencias" variant="secondary" size="default">
-            Experiências
-            <ChevronRight className="size-6" />
-          </Button>
+        <div className="flex">
+          <h2 className="text-3xl font-black text-white">Projetos</h2>
         </div>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[3fr_2fr_3fr]">
           {projects.map((project) => (
             <div key={project.id} className={gridPosition[project.id] ?? ""}>
-              <ProjectCard project={project} />
+              <Card item={project} />
             </div>
           ))}
         </div>

@@ -11,9 +11,9 @@ export default function Home() {
       <div className="flex flex-1 z-1 w-full flex-col items-center justify-center">
         <Hero />
         <FAQ />
-        <Projects />
         <Experience />
         <Testimonials />
+        <Projects />
       </div>
       <DecorativeShapes className="fixed h-screen top-0 left-0 z-0 w-full text-zinc-100 dark:text-zinc-950" />
     </div>
