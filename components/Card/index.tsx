@@ -20,7 +20,7 @@ export default function Card({ item }: { item: CardItem }) {
           )}
         </div>
         {item.date && (
-          <span className="shrink-0 text-lg font-light text-white">
+          <span className="shrink-0 text-xs font-light text-white">
             {item.date}
           </span>
         )}

@@ -36,7 +36,7 @@ export default function FAQ() {
       id="sobre-mim"
       className="flex relative min-h-screen items-center justify-center w-full px-4 md:px-8 py-20"
     >
-      <div className="flex flex-col w-full max-w-[675px] gap-16 z-10">
+      <div className="flex flex-col w-full max-w-[675px] gap-8 md:gap-16 z-10">
         <h2 className="text-3xl font-extrabold text-white text-left">
           Sobre mim
         </h2>
