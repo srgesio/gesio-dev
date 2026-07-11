@@ -11,7 +11,7 @@ interface CardItem {
 
 export default function Card({ item }: { item: CardItem }) {
   return (
-    <article className={cn("flex h-full flex-col justify-between gap-8 rounded-lg bg-zinc-900 p-6 transition-colors duration-200", item.hoverColor ? `hover:bg-${item.hoverColor}` : "hover:bg-zinc-800")}>
+    <article className={cn("flex h-full flex-col justify-between gap-8 rounded-lg bg-zinc-800 p-6 transition-colors duration-200", item.hoverColor ? `hover:bg-${item.hoverColor}` : "hover:bg-zinc-700")}>
       <div className="flex items-start justify-between gap-4">
         <div className="flex flex-1 flex-col gap-1">
           <h3 className="text-2xl font-extrabold text-white">{item.title}</h3>
