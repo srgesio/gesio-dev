@@ -15,7 +15,7 @@ export default function Home() {
         <Testimonials />
         <Projects />
       </div>
-      <DecorativeShapes className="fixed h-screen top-0 left-0 z-0 w-full text-zinc-100 dark:text-zinc-950" />
+      <DecorativeShapes className="fixed h-screen top-0 left-0 z-0 w-full scale-[0.55] md:scale-100 origin-top text-zinc-100 dark:text-zinc-950" />
     </div>
   );
 }
